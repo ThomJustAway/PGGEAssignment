@@ -19,9 +19,9 @@ namespace Assets.Resources.script.TPC
         {
             //mThirdPersonCamera = new TPCTrack(transform, mPlayer);
             //mThirdPersonCamera = new TPCFollowTrackPosition(transform, mPlayer);
-            //mThirdPersonCamera = new TPCFollowTrackPositionAndRotation(transform,mPlayer);
+            mThirdPersonCamera = new TPCFollowTrackPositionAndRotation(transform, mPlayer);
 
-            mThirdPersonCamera = new TPCTopDown(transform, mPlayer);
+            //mThirdPersonCamera = new TPCTopDown(transform, mPlayer);
             //setting up the constants
             UpdatingConstants();
         }

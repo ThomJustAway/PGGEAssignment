@@ -189,7 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mCharacterController: {fileID: 0}
   mAnimator: {fileID: 1784827983}
-  mWalkSpeed: 1
+  mWalkSpeed: 5
   mRotationSpeed: 50
 --- !u!1 &646978144
 GameObject:
