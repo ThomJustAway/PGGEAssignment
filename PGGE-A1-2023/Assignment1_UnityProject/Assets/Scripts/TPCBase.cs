@@ -57,10 +57,11 @@ namespace PGGE
 
             float padding = 0.5f; //padding to make sure the raycast ignore the player's collider
 
-            if (Physics.Raycast(pointer , out RaycastHit hitobject , direction.magnitude - padding ))
+            if (Physics.Raycast(pointer , out RaycastHit hitobject , direction.magnitude - padding, LayerMask.GetMask( "Default" ))) //will ignore glass materia
             {
                 //if there is a hit
-                Debug.Log($"hit {hitobject.transform.name} Distance: { hitobject.distance}");
+                //Debug.Log($"hit {hitobject.transform.name} Distance: { hitobject.distance}");
+
                 Vector3 offset = direction.normalized * hitobject.distance; 
                 //going to find the distance require to resolve the hit and offset it for the camera
                 CameraTransform.transform.position = CameraTransform.transform.position + offset;
