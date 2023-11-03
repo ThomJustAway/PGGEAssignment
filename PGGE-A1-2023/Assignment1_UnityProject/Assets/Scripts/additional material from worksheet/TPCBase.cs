@@ -59,14 +59,11 @@ namespace PGGE
 
             if (Physics.Raycast(pointer , out RaycastHit hitobject , direction.magnitude - padding, LayerMask.GetMask( "Default" ))) //will ignore glass materia
             {
-                //if there is a hit
-                //Debug.Log($"hit {hitobject.transform.name} Distance: { hitobject.distance}");
-
-                Vector3 offset = direction.normalized * hitobject.distance; 
+                //Vector3 offset = direction.normalized * hitobject.distance;
+                Vector3 newDistance = hitobject.point; 
                 //going to find the distance require to resolve the hit and offset it for the camera
-                CameraTransform.transform.position = CameraTransform.transform.position + offset;
+                CameraTransform.position = newDistance;
             }
-
         }
 
         public abstract void Update();

@@ -21,6 +21,9 @@ namespace Assets.Resources.script.TPC
             mCameraTransform.rotation,
             mPlayerTransform.rotation * initialRotation,
             Time.deltaTime * GameConstants.Damping);
+
+
+
             base.Update();
         }
 
