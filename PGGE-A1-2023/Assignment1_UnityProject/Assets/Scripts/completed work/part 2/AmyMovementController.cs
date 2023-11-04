@@ -33,6 +33,7 @@ public class AmyMovementController : MonoBehaviour
         mCharacterController = GetComponent<CharacterController>();
     }
 
+
     void Update()
     {
         HandleInputs();
@@ -58,26 +59,26 @@ public class AmyMovementController : MonoBehaviour
 #endif
 
         speed = mWalkSpeed;
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && !Input.GetKeyDown(KeyCode.Tab))
         {
             speed = mWalkSpeed * 2.0f;
         }
 
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    jump = true;
-        //}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jump = true;
+        }
 
-        //if (Input.GetKeyUp(KeyCode.Space))
-        //{
-        //    jump = false;
-        //}
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            jump = false;
+        }
 
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    crouch = !crouch;
-        //    Crouch();
-        //}
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            crouch = !crouch;
+            Crouch();
+        }
     }
 
     public void Move()
@@ -86,6 +87,19 @@ public class AmyMovementController : MonoBehaviour
 
         // We shall apply movement to the game object here.
         if (mAnimator == null) return;
+        MovementMethod();
+
+
+        //mAnimator.SetFloat("PosX", 0);
+        if (jump)
+        {
+            Jump();
+            jump = false;
+        }
+    }
+
+    private void MovementMethod()
+    {
         if (mFollowCameraForward)
         {
             // rotate Player towards the camera forward.
@@ -102,16 +116,9 @@ public class AmyMovementController : MonoBehaviour
 
         Vector3 forward = transform.TransformDirection(Vector3.forward).normalized; //geting the forward of the transform from world space
         forward.y = 0.0f; //remove any upward force
-        Debug.Log(forward);
         mCharacterController.Move(forward * vInput * speed * Time.deltaTime);
         mAnimator.SetFloat("PosZ", vInput * speed / (2.0f * mWalkSpeed));
-        mAnimator.SetFloat("PosX", hInput);
-        //mAnimator.SetFloat("PosX", 0);
-        //if (jump)
-        //{
-        //    Jump();
-        //    jump = false;
-        //}
+        mAnimator.SetFloat("PosX", 0);
     }
 
     void Jump()
@@ -122,21 +129,24 @@ public class AmyMovementController : MonoBehaviour
 
     private Vector3 HalfHeight;
     private Vector3 tempHeight;
-    //void Crouch()
-    //{
-    //    mAnimator.SetBool("Crouch", crouch);
-    //    if (crouch)
-    //    {
-    //        tempHeight = CameraConstants.CameraPositionOffset;
-    //        HalfHeight = tempHeight;
-    //        HalfHeight.y *= 0.5f;
-    //        CameraConstants.CameraPositionOffset = HalfHeight;
-    //    }
-    //    else
-    //    {
-    //        CameraConstants.CameraPositionOffset = tempHeight;
-    //    }
-    //}
+    void Crouch()
+    {
+        mAnimator.SetBool("Crouch", crouch);
+        if (crouch)
+        {
+            tempHeight = CameraConstants.CameraPositionOffset;
+            HalfHeight = tempHeight;
+            HalfHeight.y *= 0.5f;
+            CameraConstants.CameraPositionOffset = HalfHeight;
+        }
+        else
+        {
+            CameraConstants.CameraPositionOffset = tempHeight;
+        }
+
+        
+        MovementMethod();
+    }
 
     void ApplyGravity()
     {

@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: b818f130321bdea42bb77b43a6b8bb50
+guid: 92dd8bec4888150448f484201f085b07
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: left strafe
+    second: crouchstand
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,11 +36,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: left strafe
+      name: crouchstand
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 31
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
