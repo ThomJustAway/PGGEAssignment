@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 2a3e8b5a6aab34646beafbc3adbf56ce
+guid: 8b636020de7b3bc49ae4d31a87e3f52b
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: crouchWalkBack
+    second: crouch walk back
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,7 +36,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: crouchWalkBack
+      name: crouch walk back
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
@@ -47,7 +47,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

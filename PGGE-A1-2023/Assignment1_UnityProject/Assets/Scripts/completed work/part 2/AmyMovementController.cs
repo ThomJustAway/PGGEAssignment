@@ -25,6 +25,8 @@ public class AmyMovementController : MonoBehaviour
     private bool crouch = false;
     public float mGravity = -30.0f;
     public float mJumpHeight = 1.0f;
+    [Range(0.2f, 1f)]
+    public float speedReductionWhenCrouching = 1f;
 
     private Vector3 mVelocity = new Vector3(0.0f, 0.0f, 0.0f);
 
@@ -38,6 +40,9 @@ public class AmyMovementController : MonoBehaviour
     {
         HandleInputs();
         Move();
+
+
+
     }
 
     private void FixedUpdate()
@@ -59,9 +64,14 @@ public class AmyMovementController : MonoBehaviour
 #endif
 
         speed = mWalkSpeed;
-        if (Input.GetKey(KeyCode.LeftShift) && !Input.GetKeyDown(KeyCode.Tab))
-        {
+        if (Input.GetKey(KeyCode.LeftShift))
+        { //prevent players from 
             speed = mWalkSpeed * 2.0f;
+        }
+
+        if (crouch)
+        {
+            speed = mWalkSpeed * speedReductionWhenCrouching;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -83,19 +93,19 @@ public class AmyMovementController : MonoBehaviour
 
     public void Move()
     {
-        if (crouch) return;
-
-        // We shall apply movement to the game object here.
         if (mAnimator == null) return;
-        MovementMethod();
 
-
-        //mAnimator.SetFloat("PosX", 0);
-        if (jump)
+        if (!crouch && jump)
         {
             Jump();
             jump = false;
         }
+        //making sure that if players crouch, they cant jump
+        MovementMethod();
+
+
+        //mAnimator.SetFloat("PosX", 0);
+        
     }
 
     private void MovementMethod()
@@ -117,7 +127,16 @@ public class AmyMovementController : MonoBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward).normalized; //geting the forward of the transform from world space
         forward.y = 0.0f; //remove any upward force
         mCharacterController.Move(forward * vInput * speed * Time.deltaTime);
-        mAnimator.SetFloat("PosZ", vInput * speed / (2.0f * mWalkSpeed));
+
+        if(crouch)
+        {//special for crouch
+            mAnimator.SetFloat("PosZ", vInput * speed / (2.0f * speed));
+        }
+        else
+        {
+            mAnimator.SetFloat("PosZ", vInput * speed / (2.0f * mWalkSpeed));
+
+        }
         mAnimator.SetFloat("PosX", 0);
     }
 
@@ -143,9 +162,6 @@ public class AmyMovementController : MonoBehaviour
         {
             CameraConstants.CameraPositionOffset = tempHeight;
         }
-
-        
-        MovementMethod();
     }
 
     void ApplyGravity()
