@@ -55,7 +55,7 @@ namespace PGGE
 
             //Debug.DrawRay(CameraTransform.transform.position, direction, Color.blue); //uncomment it for debug. for visual purpose
 
-            float padding = 0.5f; //padding to make sure the raycast ignore the player's collider
+            float padding = 0.2f; //padding to make sure the raycast ignore the player's collider
 
             if (Physics.Raycast(pointer , out RaycastHit hitobject , direction.magnitude - padding, LayerMask.GetMask( "Default" ))) //will ignore glass materia
             {
