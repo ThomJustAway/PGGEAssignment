@@ -27,8 +27,9 @@ public class AmyMovementController : MonoBehaviour
     public float mJumpHeight = 1.0f;
     [Range(0.2f, 1f)]
     public float speedReductionWhenCrouching = 1f;
-
     private Vector3 mVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+    public float inputDamper = 1.0f; //this is to reduce the effects of the input 
+    public float resistance = 0.3f; //this is to reduce the acceleration 
 
     void Start()
     {
@@ -40,9 +41,6 @@ public class AmyMovementController : MonoBehaviour
     {
         HandleInputs();
         Move();
-
-
-
     }
 
     private void FixedUpdate()
@@ -53,15 +51,28 @@ public class AmyMovementController : MonoBehaviour
     public void HandleInputs()
     {
         // We shall handle our inputs here.
-#if UNITY_STANDALONE
-        hInput = Input.GetAxis("Horizontal");
-        vInput = Input.GetAxis("Vertical");
-#endif
 
-#if UNITY_ANDROID
-        hInput = 2.0f * mJoystick.Horizontal;
-        vInput = 2.0f * mJoystick.Vertical;
-#endif
+        float playerHInput;
+        float playerVInput;
+
+        #if UNITY_STANDALONE
+                hInput = Input.GetAxis("Horizontal");
+                playerVInput = Input.GetAxis("Vertical");
+        #endif
+
+        #if UNITY_ANDROID
+                playerHInput = 2.0f * mJoystick.Horizontal;
+                playerVInput = 2.0f * mJoystick.Vertical;
+        #endif
+
+        if(playerVInput > 0)
+        {
+            vInput = Mathf.Clamp(vInput + playerVInput * inputDamper, 0.0f, 1.0f);
+        }
+        else
+        {
+            vInput = vInput - resistance * Time.deltaTime; 
+        }
 
         speed = mWalkSpeed;
         if (Input.GetKey(KeyCode.LeftShift))
@@ -74,7 +85,7 @@ public class AmyMovementController : MonoBehaviour
             speed = mWalkSpeed * speedReductionWhenCrouching;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && mCharacterController.isGrounded)
         {
             jump = true;
         }
@@ -89,6 +100,7 @@ public class AmyMovementController : MonoBehaviour
             crouch = !crouch;
             Crouch();
         }
+
     }
 
     public void Move()
@@ -102,8 +114,6 @@ public class AmyMovementController : MonoBehaviour
         }
         //making sure that if players crouch, they cant jump
         MovementMethod();
-
-
         //mAnimator.SetFloat("PosX", 0);
         
     }
@@ -127,7 +137,6 @@ public class AmyMovementController : MonoBehaviour
         Vector3 forward = transform.TransformDirection(Vector3.forward).normalized; //geting the forward of the transform from world space
         forward.y = 0.0f; //remove any upward force
         mCharacterController.Move(forward * vInput * speed * Time.deltaTime);
-
         if(crouch)
         {//special for crouch
             mAnimator.SetFloat("PosZ", vInput * speed / (2.0f * speed));
@@ -138,6 +147,7 @@ public class AmyMovementController : MonoBehaviour
 
         }
         mAnimator.SetFloat("PosX", 0);
+        mCharacterController.Move(mVelocity * Time.deltaTime);
     }
 
     void Jump()
@@ -150,6 +160,7 @@ public class AmyMovementController : MonoBehaviour
     private Vector3 tempHeight;
     void Crouch()
     {
+        //called in the handle input
         mAnimator.SetBool("Crouch", crouch);
         if (crouch)
         {
@@ -168,7 +179,18 @@ public class AmyMovementController : MonoBehaviour
     {
         // apply gravity.
         mVelocity.y += mGravity * Time.deltaTime;
-        if (mCharacterController.isGrounded && mVelocity.y < 0)
-            mVelocity.y = 0f;
+        if (mCharacterController.isGrounded && mVelocity.y < 0) mVelocity.y = 0f;
     }
+
+    /*
+     * todo
+     * 1. Have a acceleration system (to prevent players from stop suddenly)
+     * 2. implement a FSM
+     * 3. 
+     */
+
+    // Need the movement (can make the player injured and account for different camera states)
+    // implement punching (cant move)
+    // crouching
+    // recovery
 }

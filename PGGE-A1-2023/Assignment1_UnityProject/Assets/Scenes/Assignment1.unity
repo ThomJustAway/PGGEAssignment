@@ -1634,9 +1634,11 @@ MonoBehaviour:
   mRotationSpeed: 50
   mFollowCameraForward: 0
   mTurnRate: 10
-  mGravity: -30
+  mGravity: -10
   mJumpHeight: 1
   speedReductionWhenCrouching: 1
+  inputDamper: 1
+  resistance: 0.3
 --- !u!4 &1404733502
 Transform:
   m_ObjectHideFlags: 0
