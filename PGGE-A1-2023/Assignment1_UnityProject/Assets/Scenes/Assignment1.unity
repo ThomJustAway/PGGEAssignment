@@ -1274,7 +1274,7 @@ MonoBehaviour:
   mRotationSpeed: 5
   mTouchField: {fileID: 1263475373}
   playerHeight: 1.81
-  mCameraType: 2
+  mCameraType: 3
 --- !u!1 &983212814
 GameObject:
   m_ObjectHideFlags: 0

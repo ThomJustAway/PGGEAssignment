@@ -1,7 +1,9 @@
 using PGGE;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class AmyMovementController : MonoBehaviour
 {
@@ -52,26 +54,38 @@ public class AmyMovementController : MonoBehaviour
     {
         // We shall handle our inputs here.
 
-        float playerHInput;
         float playerVInput;
 
         #if UNITY_STANDALONE
                 hInput = Input.GetAxis("Horizontal");
                 playerVInput = Input.GetAxis("Vertical");
-        #endif
+#endif
 
-        #if UNITY_ANDROID
-                playerHInput = 2.0f * mJoystick.Horizontal;
+#if UNITY_ANDROID
+                hInput = 2.0f * mJoystick.Horizontal;
                 playerVInput = 2.0f * mJoystick.Vertical;
-        #endif
+#endif
 
-        if(playerVInput > 0)
-        {
-            vInput = Mathf.Clamp(vInput + playerVInput * inputDamper, 0.0f, 1.0f);
+        if (playerVInput > 0 || playerVInput < 0)
+        {//when vinput is either back or forth
+            vInput = Mathf.Clamp(vInput + playerVInput * inputDamper, -1.0f, 1.0f); //cap the vinput to 0 or 1f
         }
-        else
-        {
-            vInput = vInput - resistance * Time.deltaTime; 
+        //else add resistance to the movement
+        else 
+        {//when playerinput is exactly zero
+            if(vInput > 0.1f || vInput < -0.1f)
+            { //this is to prevent the vinput to constantly get minus or plus
+                vInput = 0;
+            }
+
+            if(vInput > 0)
+            {
+                vInput -=  resistance * Time.deltaTime;
+            }
+            else if(vInput < 0)
+            {
+                vInput += resistance * Time.deltaTime;  
+            }
         }
 
         speed = mWalkSpeed;
@@ -85,20 +99,21 @@ public class AmyMovementController : MonoBehaviour
             speed = mWalkSpeed * speedReductionWhenCrouching;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && mCharacterController.isGrounded)
+        if (Input.GetKey(KeyCode.Space) && mCharacterController.isGrounded)
         {
             jump = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            jump = false;
-        }
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             crouch = !crouch;
             Crouch();
+        }
+
+        if (Input.GetMouseButton((int)MouseButton.RightMouse))
+        {
+
         }
 
     }
