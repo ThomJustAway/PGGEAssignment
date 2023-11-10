@@ -186,7 +186,6 @@ public class AmyMovementController : MonoBehaviour
         else
         {
             mAnimator.SetFloat("PosZ", vInput * speed / (2.0f * mWalkSpeed));
-
         }
         mAnimator.SetFloat("PosX", 0);
         mCharacterController.Move(mVelocity * Time.deltaTime);

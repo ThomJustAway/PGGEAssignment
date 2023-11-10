@@ -1692,8 +1692,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 737391caf1d514348824efb3a8a508dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0
-  inputDamper: 0
+  animator: {fileID: 326372204}
+  walkSpeed: 1
+  inputDamper: 0.3
+  turnRate: 1
+  rotationSpeed: 50
 --- !u!114 &1404733505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1731,6 +1734,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 94c5dfa1-009a-4cab-a1b0-40a5d4f233dd
     m_ActionName: Player/Jump[/Keyboard/quote]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: be97f4ee-af16-4d6f-8054-4cf54d34b96b
+    m_ActionName: Player/Sprint[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
