@@ -11,27 +11,44 @@ public class AmyMovementController : MonoBehaviour
     public CharacterController mCharacterController;
     public Animator mAnimator;
 
+    #region values for amy
     public float mWalkSpeed = 1.5f;
     public float mRotationSpeed = 50.0f;
     public bool mFollowCameraForward = false;
     public float mTurnRate = 10.0f;
+    public float mGravity = -30.0f;
+    public float mJumpHeight = 1.0f;
+    public float inputDamper = 1.0f; //this is to reduce the effects of the input 
+    public float resistance = 0.3f; //this is to reduce the acceleration 
+    public float speedReductionWhenCrouching = 1f;
+    #endregion
 
-#if UNITY_ANDROID
-    public FixedJoystick mJoystick;
-#endif
+    #if UNITY_ANDROID
+        public FixedJoystick mJoystick;
+    #endif
+
+    #region playerInput
 
     private float hInput;
     private float vInput;
     private float speed;
     private bool jump = false;
     private bool crouch = false;
-    public float mGravity = -30.0f;
-    public float mJumpHeight = 1.0f;
     [Range(0.2f, 1f)]
-    public float speedReductionWhenCrouching = 1f;
     private Vector3 mVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-    public float inputDamper = 1.0f; //this is to reduce the effects of the input 
-    public float resistance = 0.3f; //this is to reduce the acceleration 
+
+    #endregion
+
+    #region attacking
+
+    [SerializeField] List<AttackSO> combo = new List<AttackSO>();
+    private float lastClickTime;
+    private float lastComboEnd;
+    private int comboCount;
+    private readonly string EndComboFunctionName = "EndCombo";
+    private bool attack = false;
+
+    #endregion
 
     void Start()
     {
@@ -42,7 +59,8 @@ public class AmyMovementController : MonoBehaviour
     void Update()
     {
         HandleInputs();
-        Move();
+        AmyNextMove();
+        ExitAttack();
     }
 
     private void FixedUpdate()
@@ -111,16 +129,25 @@ public class AmyMovementController : MonoBehaviour
             Crouch();
         }
 
-        if (Input.GetMouseButton((int)MouseButton.RightMouse))
+        if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse)) //start attacking
         {
-
+            attack = true;
+            Attack();
         }
 
     }
 
-    public void Move()
+    public void AmyNextMove()
     {
         if (mAnimator == null) return;
+
+        if(!crouch && attack)
+        {
+            Attack();
+            attack = false;
+            return;
+            //start an attack then stop the entire function
+        }
 
         if (!crouch && jump)
         {
@@ -168,6 +195,19 @@ public class AmyMovementController : MonoBehaviour
     void Jump()
     {
         mAnimator.SetTrigger("Jump");
+        if(vInput > 0.2f || vInput < -0.2f)
+        {
+            StartCoroutine(ChargingUpBeforeJumping());
+        }
+        else
+        {
+            mVelocity.y += Mathf.Sqrt(mJumpHeight * -2f * mGravity);
+        }
+    }
+
+    private IEnumerator ChargingUpBeforeJumping()
+    {
+        yield return new WaitForSeconds(2);
         mVelocity.y += Mathf.Sqrt(mJumpHeight * -2f * mGravity);
     }
 
@@ -176,7 +216,6 @@ public class AmyMovementController : MonoBehaviour
     void Crouch()
     {
         //called in the handle input
-        mAnimator.SetBool("Crouch", crouch);
         if (crouch)
         {
             tempHeight = CameraConstants.CameraPositionOffset;
@@ -196,6 +235,42 @@ public class AmyMovementController : MonoBehaviour
         mVelocity.y += mGravity * Time.deltaTime;
         if (mCharacterController.isGrounded && mVelocity.y < 0) mVelocity.y = 0f;
     }
+
+    #region attackingFunction
+
+    void Attack()
+    {
+        if (Time.time - lastClickTime >= 0.5f && comboCount <= combo.Count)
+        {
+            CancelInvoke(EndComboFunctionName);
+            CancelInvoke("Move");
+            if(Time.time - lastClickTime >= 0.2f)
+            {
+                mAnimator.runtimeAnimatorController = combo[comboCount].controller;
+                mAnimator.Play("attack", 0, 0);
+
+                comboCount++;
+                lastClickTime = Time.time;
+                if(comboCount == combo.Count ) comboCount = 0;
+            }
+        }
+    }
+
+    void ExitAttack()
+    {
+        if(mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && mAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        {
+            Invoke(EndComboFunctionName , 1);
+        }
+    }
+
+    void EndCombo() //called through invoke
+    {
+        comboCount = 0;
+        lastComboEnd = Time.time;
+    }
+
+    #endregion 
 
     /*
      * todo

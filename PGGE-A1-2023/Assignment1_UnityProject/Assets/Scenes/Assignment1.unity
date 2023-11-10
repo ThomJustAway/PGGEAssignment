@@ -1274,7 +1274,7 @@ MonoBehaviour:
   mRotationSpeed: 5
   mTouchField: {fileID: 1263475373}
   playerHeight: 1.81
-  mCameraType: 3
+  mCameraType: 2
 --- !u!1 &983212814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,9 +1636,14 @@ MonoBehaviour:
   mTurnRate: 10
   mGravity: -10
   mJumpHeight: 1
-  speedReductionWhenCrouching: 1
   inputDamper: 1
   resistance: 0.3
+  speedReductionWhenCrouching: 1
+  combo:
+  - {fileID: 11400000, guid: d5e63ac072ecd77429204eec2ba078de, type: 2}
+  - {fileID: 11400000, guid: 1578d60b58cc010458d7241969bf2dd9, type: 2}
+  - {fileID: 11400000, guid: 2a7aba80d4e4138438dceb68c6cc4559, type: 2}
+  - {fileID: 11400000, guid: 26795fd5a6c506c4ab1b735be39e8a54, type: 2}
 --- !u!4 &1404733502
 Transform:
   m_ObjectHideFlags: 0
