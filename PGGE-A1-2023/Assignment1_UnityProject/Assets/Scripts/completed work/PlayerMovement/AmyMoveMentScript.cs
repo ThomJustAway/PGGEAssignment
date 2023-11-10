@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using static UnityEngine.InputSystem.InputAction;
 
 public class AmyMoveMentScript : MonoBehaviour
@@ -18,6 +19,7 @@ public class AmyMoveMentScript : MonoBehaviour
     #region inputValues
         public Vector2 inputVector { get; private set; }
         public bool canJump { get; private set; }
+        public void StopJump() { canJump = false; }
     #endregion
 
     #region values for moving amy
@@ -32,13 +34,27 @@ public class AmyMoveMentScript : MonoBehaviour
         public bool Sprinting { get; private set; }
     #endregion
 
+    #region values for jumping Amy
+
+    [SerializeField] private float jumpHeight;
+    public float JumpHeight { get { return jumpHeight; } }
+
+    #endregion
+
     #region misc values
 
-        [SerializeField] private float turnRate;
+    [SerializeField] private float turnRate;
         public float TurnRate { get {  return turnRate; } }
 
         [SerializeField] private float rotationSpeed;
         public float RotationSpeed { get { return rotationSpeed; } }
+
+        [SerializeField] private float gravity;
+        public float Gravity { get { return gravity; } }
+
+        private Vector3 velocity;
+        public Vector3 Velocity { get { return velocity; } set { velocity = value; } }
+
     #endregion
 
     private void Start()
@@ -60,8 +76,22 @@ public class AmyMoveMentScript : MonoBehaviour
 
     private void Update()
     {
+        movementStateManager.CheckCameraType();
         movementStateManager.Move();
     }
+
+    private void FixedUpdate()
+    {
+        ApplyGravity();
+    }
+
+    void ApplyGravity()
+    {
+        // apply gravity.
+        velocity.y += gravity * Time.deltaTime;
+        if (CharacterController.isGrounded && velocity.y < 0) velocity.y = 0f;
+    }
+
 
     #region inputsystem
     //all of this function are invoke as callbacks

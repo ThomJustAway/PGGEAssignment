@@ -1634,7 +1634,7 @@ MonoBehaviour:
   mAnimator: {fileID: 326372204}
   mWalkSpeed: 1.5
   mRotationSpeed: 50
-  mFollowCameraForward: 0
+  mFollowCameraForward: 1
   mTurnRate: 10
   mGravity: -10
   mJumpHeight: 1
@@ -1693,10 +1693,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 326372204}
-  walkSpeed: 1
+  walkSpeed: 1.5
   inputDamper: 0.3
-  turnRate: 1
+  jumpHeight: 1
+  turnRate: 150
   rotationSpeed: 50
+  gravity: -10
 --- !u!114 &1404733505
 MonoBehaviour:
   m_ObjectHideFlags: 0
