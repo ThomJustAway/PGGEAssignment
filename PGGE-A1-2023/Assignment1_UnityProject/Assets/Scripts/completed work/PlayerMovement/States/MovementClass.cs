@@ -30,8 +30,8 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
 
         private void StandardMovement()
         {
-            float vInput = AmyMoveMentScript.Instance.inputVector.y;
-            float hInput = AmyMoveMentScript.Instance.inputVector.x;
+            float vInput = AmyMoveMentScript.Instance.InputVector.y;
+            float hInput = AmyMoveMentScript.Instance.InputVector.x;
             float rotationSpeed = AmyMoveMentScript.Instance.RotationSpeed;
             //since the value is normalize, I have to change it back to make it not normalize
             if (vInput > 0.0f) vInput = 1.0f;
@@ -52,12 +52,12 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
                 transform.rotation,
                 Quaternion.Euler(0.0f, eu.y, 0.0f),
                 turnRate * Time.deltaTime);
-            float vInput = AmyMoveMentScript.Instance.inputVector.y;
+            float vInput = AmyMoveMentScript.Instance.InputVector.y;
             if (vInput > 0.0f) vInput = 1.0f;
             MovingBasedOnVInputOnly(vInput);
         }
 
-        private void MovingBasedOnVInputOnly(float vInput)
+        protected virtual void MovingBasedOnVInputOnly(float vInput)
         {
             float walkingSpeed = AmyMoveMentScript.Instance.WalkSpeed;
 
@@ -75,9 +75,6 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             animator.SetFloat("PosZ", vInput * speed / (2.0f * walkingSpeed));
 
             animator.SetFloat("PosX", 0);
-
-            //this is for the gravity
-            //characterController.Move(mVelocity * Time.deltaTime);
         }
 
     }

@@ -1696,6 +1696,8 @@ MonoBehaviour:
   walkSpeed: 1.5
   inputDamper: 0.3
   jumpHeight: 1
+  crouchingSpeedReduction: 0.6
+  combo: []
   turnRate: 150
   rotationSpeed: 50
   gravity: -10
