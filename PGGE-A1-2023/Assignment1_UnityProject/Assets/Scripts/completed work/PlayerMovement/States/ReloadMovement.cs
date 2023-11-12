@@ -3,19 +3,23 @@ using UnityEngine;
 
 namespace Assets.Scripts.completed_work.PlayerMovement.States
 {
-    public class ReloadMovement : MonoBehaviour
+    public class ReloadMovement : MovementAbstractClass
     {
-
-        // Use this for initialization
-        void Start()
+        private string key = "Reload";
+        public ReloadMovement(CameraType cameraType) : base(cameraType)
         {
-
         }
 
-        // Update is called once per frame
-        void Update()
+        public override void CompleteAction()
         {
-
+            animator.SetTrigger(key);
+            AmyMoveMentScript.Instance.FinishReloading();
+        }
+        
+        public bool IsAnimationStillPlaying()
+        {
+            return animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f &&
+               animator.GetCurrentAnimatorStateInfo(0).IsTag(key);
         }
     }
 }

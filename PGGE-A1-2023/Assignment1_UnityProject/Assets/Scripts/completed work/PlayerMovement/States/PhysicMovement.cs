@@ -8,11 +8,11 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
         public PhysicMovement(CameraType cameraType) : base(cameraType)
         {
         }
-
         public override void CompleteAction()
         {
             var velocity = AmyMoveMentScript.Instance.Velocity;
             characterController.Move(velocity * Time.deltaTime);
         }
+
     }
 }

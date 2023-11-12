@@ -9,10 +9,7 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
     {
         private List<AttackSO> combo = new List<AttackSO>();
         private float lastClickTime;
-        private float lastComboEnd;
         private int comboCount;
-        private readonly string EndComboFunctionName = "EndCombo";
-        private bool attack = false;
         public AttackingMovement(CameraType cameraType) : base(cameraType)
         {
             lastClickTime = Time.time;
@@ -21,16 +18,18 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
 
         public override void CompleteAction()
         {
-
+            Attack();
         }
 
         private void Attack()
         {
+            //add a function to reset the count
             if (Time.time - lastClickTime >= 0.5f && comboCount <= combo.Count )
             {
-                //CancelInvoke(EndComboFunctionName);
-                //CancelInvoke("Move");
-                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack") || 
+                    (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f &&
+                     animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack")
+                    ))
                 {
                     animator.runtimeAnimatorController = combo[comboCount].controller;
                     animator.Play("attack", 0, 0);
@@ -40,8 +39,13 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
                     if (comboCount == combo.Count) comboCount = 0;
                     AttackFinish();
                 }
-                
             }
+        }
+
+        public bool IsAttackAnimationStillPlaying()
+        {
+            return animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f &&
+               animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack");
         }
 
         private void AttackFinish()
@@ -49,18 +53,10 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             AmyMoveMentScript.Instance.AttackingDone();
         }
 
-        private void ExitAttack()
-        {
-            //if (mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && mAnimator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
-            //{
-            //    Invoke(EndComboFunctionName, 1);
-            //}
-        }
 
-        private void EndCombo() //called through invoke
+        private void EndCombo()
         {
             comboCount = 0;
-            lastComboEnd = Time.time;
         }
     }
 

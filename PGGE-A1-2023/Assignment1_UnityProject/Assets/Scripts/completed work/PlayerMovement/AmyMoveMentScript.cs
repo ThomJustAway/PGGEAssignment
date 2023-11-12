@@ -51,6 +51,11 @@ public class AmyMoveMentScript : MonoBehaviour
     public float CrouchingSpeedReduction { get {  return crouchingSpeedReduction; } }
     #endregion
 
+    #region values for reloading amy
+        public bool IsReloading { get; private set; }
+        public void FinishReloading() { IsReloading = false; }
+    #endregion
+
     #region values for Amy punching
 
     public bool IsAttacking { get; private set; }
@@ -106,9 +111,10 @@ public class AmyMoveMentScript : MonoBehaviour
     {
         // apply gravity.
         velocity.y += gravity * Time.deltaTime;
-        if (CharacterController.isGrounded && velocity.y < 0) velocity.y = 0f;
+        if (CharacterController.isGrounded && velocity.y < 0) velocity.y = gravity * 0.01f;
+        //because of some bug with the character controller it wont work if velocity is
+        //set to 0 https://stackoverflow.com/questions/39732254/isgrounded-in-charactercontroller-not-stable
     }
-
 
     #region inputsystem
     //all of this function are invoke as callbacks
@@ -119,7 +125,8 @@ public class AmyMoveMentScript : MonoBehaviour
 
     private void OnJump()
     {
-        if (!CanCrouch || CharacterController.isGrounded)
+        
+        if (!CanCrouch && CharacterController.isGrounded)
         {
             CanJump = true;
         }
@@ -140,7 +147,14 @@ public class AmyMoveMentScript : MonoBehaviour
         if (!CanCrouch)
         {
             IsAttacking = true;
+        }
+    }
 
+    private void OnReload()
+    {
+        if(!CanCrouch && !CanJump && !IsAttacking)
+        {
+            IsReloading = true;
         }
     }
     #endregion
