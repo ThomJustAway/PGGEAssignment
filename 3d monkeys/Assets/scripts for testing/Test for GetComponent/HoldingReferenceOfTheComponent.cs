@@ -11,7 +11,21 @@ public class HoldingReferenceOfTheComponent : MonoBehaviour
    [SerializeField] private Rigidbody2D rigidbody2;
    [SerializeField] private MeshFilter meshFilter;
     [SerializeField] private MeshRenderer meshRenderer;
+    public int repeat;
     void Update()
+    {
+        //Test1();
+        Test2();
+    }
+
+    private void Test2()
+    {
+        for(int i = 0; i < repeat; i++)
+        {
+            print(rigidbody2);
+        }
+    }
+    private void Test1()
     {
         print(BoxCollider);
         print(audioSource);
