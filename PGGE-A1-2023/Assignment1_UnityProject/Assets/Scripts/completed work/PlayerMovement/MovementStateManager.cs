@@ -18,6 +18,7 @@ public class MovementStateManager
     private CrouchingMovement crouchingMovement;
     private AttackingMovement attackingMovement;
     private ReloadMovement reloadMovement;
+    private IdleMovement idleMovement;
     #endregion
 
     private bool canJump;
@@ -26,6 +27,7 @@ public class MovementStateManager
     private bool attackAnimationStillPlaying;
     private bool canReload;
     private bool reloadAnimationStillPlaying;
+    private bool canWalk;
 
     public MovementStateManager() 
     { 
@@ -41,6 +43,7 @@ public class MovementStateManager
         crouchingMovement = new CrouchingMovement(cameraType);
         attackingMovement = new AttackingMovement(cameraType);
         reloadMovement = new ReloadMovement(cameraType);
+        idleMovement = new IdleMovement(cameraType);
 
         //adding them in a array so that I can make changes to all of them if the camera changes
         movements.Add(normalGroundMovement);
@@ -57,6 +60,7 @@ public class MovementStateManager
         canJump = AmyMoveMentScript.Instance.CanJump; //cant have player crouching and jumping at the same time.
         canAttack = AmyMoveMentScript.Instance.IsAttacking;
         canReload = AmyMoveMentScript.Instance.IsReloading;
+        canWalk = AmyMoveMentScript.Instance.IsMoving;
 
         attackAnimationStillPlaying = attackingMovement.IsAttackAnimationStillPlaying();
         reloadAnimationStillPlaying = reloadMovement.IsAnimationStillPlaying();
@@ -78,10 +82,15 @@ public class MovementStateManager
         {
             reloadMovement.CompleteAction();
         }
-        else if(!reloadAnimationStillPlaying)
+        else if(!reloadAnimationStillPlaying && canWalk)
         {
             normalGroundMovement.CompleteAction();
         } //do normal walking
+        else
+        {
+            Debug.Log("idle running");
+            idleMovement.CompleteAction();
+        }
 
         //Add physic to the amy
         physicMovement.CompleteAction();

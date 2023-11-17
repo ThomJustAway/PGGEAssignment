@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Assets.Scripts.completed_work.PlayerMovement.States
+{
+    public class IdleMovement : MovementAbstractClass
+    {
+        private List<AnimatorOverrideController> IdleAnimations;
+        public IdleMovement(CameraType cameraType) : base(cameraType)
+        {
+            IdleAnimations = AmyMoveMentScript.Instance.IdleAnimations;
+        }
+
+        public override void CompleteAction()
+        {
+            bool hasAnimationFinish = animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.95f &&
+                animator.GetCurrentAnimatorStateInfo(0).IsTag("GroundBlendTree");
+            if(hasAnimationFinish)
+            {
+                RandomiseIdleAnimation();
+            }
+        }
+
+        private void RandomiseIdleAnimation()
+        {
+            int randomInt = (int) UnityEngine.Random.Range(0, IdleAnimations.Count - 1);
+            animator.runtimeAnimatorController = IdleAnimations[randomInt];
+        }
+    }
+}
