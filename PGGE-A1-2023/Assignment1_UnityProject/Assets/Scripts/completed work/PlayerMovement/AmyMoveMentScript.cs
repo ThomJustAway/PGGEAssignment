@@ -21,7 +21,6 @@ public class AmyMoveMentScript : MonoBehaviour
         public Vector2 InputVector { get; private set; }
         public bool CanJump { get; private set; }
         public void StopJump() { CanJump = false; }
-
         public bool CanCrouch { get; private set; }
     #endregion
 
@@ -64,9 +63,16 @@ public class AmyMoveMentScript : MonoBehaviour
     public List<AttackSO> Combo { get {  return combo; } }
     #endregion
 
+    #region
+    [SerializeField] private List<AnimatorOverrideController> idleAnimations;
+    public List<AnimatorOverrideController> IdleAnimations { get { return idleAnimations; } }
+    #endregion
+
     #region misc values
 
-    [SerializeField] private float turnRate;
+        public bool IsMoving { get { return InputVector != Vector2.zero; } }
+
+        [SerializeField] private float turnRate;
         public float TurnRate { get {  return turnRate; } }
 
         [SerializeField] private float rotationSpeed;

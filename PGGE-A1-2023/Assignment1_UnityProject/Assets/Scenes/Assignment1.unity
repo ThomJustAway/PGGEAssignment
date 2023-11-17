@@ -2413,6 +2413,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1578d60b58cc010458d7241969bf2dd9, type: 2}
   - {fileID: 11400000, guid: 2a7aba80d4e4138438dceb68c6cc4559, type: 2}
   - {fileID: 11400000, guid: 26795fd5a6c506c4ab1b735be39e8a54, type: 2}
+  idleAnimations:
+  - {fileID: 22100000, guid: 218c82c5566eb93478291f461ea6018e, type: 2}
+  - {fileID: 22100000, guid: b2fd2643b360b9b449d76fed66bfb755, type: 2}
+  - {fileID: 22100000, guid: 7da98d6fc5ec96943accb54f0080373d, type: 2}
   turnRate: 150
   rotationSpeed: 50
   gravity: -10
