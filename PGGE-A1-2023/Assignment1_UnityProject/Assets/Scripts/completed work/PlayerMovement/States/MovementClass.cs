@@ -71,9 +71,7 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             }
 
             characterController.Move(forward * vInput * speed * Time.deltaTime);
-
             animator.SetFloat("PosZ", vInput * speed / (2.0f * walkingSpeed));
-
             animator.SetFloat("PosX", 0);
         }
 
