@@ -9,22 +9,36 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
     {
         private List<AnimatorOverrideController> IdleAnimations;
         private string IdleAnimationName = "GroundBlendTree";
+        private float lastUpdateCall;
         public IdleMovement(CameraType cameraType) : base(cameraType)
         {
             IdleAnimations = AmyMoveMentScript.Instance.IdleAnimations;
+            lastUpdateCall = Time.time;
         }
 
         public override void CompleteAction()
         {
+            CheckingUpdatesAndResettingAnimation();
+            lastUpdateCall = Time.time;
             bool hasAnimationFinish = animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.95f &&
                 animator.GetCurrentAnimatorStateInfo(0).IsTag(IdleAnimationName);
 
             ResetAnimation();
-            if(hasAnimationFinish)
+            if (hasAnimationFinish)
             {
                 RandomiseIdleAnimation();
             }
-            
+
+        }
+
+        private void CheckingUpdatesAndResettingAnimation()
+        {
+            if (Time.time - lastUpdateCall > 0.1f)
+            {
+                ResetAnimation();
+                animator.runtimeAnimatorController = IdleAnimations[0]; //reset the animation back to usual idle
+                animator.Play(IdleAnimationName, 0, 0);
+            }
         }
 
         private void ResetAnimation()

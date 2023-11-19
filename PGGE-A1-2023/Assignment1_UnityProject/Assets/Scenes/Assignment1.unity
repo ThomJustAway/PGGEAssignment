@@ -2414,9 +2414,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2a7aba80d4e4138438dceb68c6cc4559, type: 2}
   - {fileID: 11400000, guid: 26795fd5a6c506c4ab1b735be39e8a54, type: 2}
   idleAnimations:
-  - {fileID: 22100000, guid: 218c82c5566eb93478291f461ea6018e, type: 2}
-  - {fileID: 22100000, guid: b2fd2643b360b9b449d76fed66bfb755, type: 2}
   - {fileID: 22100000, guid: 7da98d6fc5ec96943accb54f0080373d, type: 2}
+  - {fileID: 22100000, guid: b2fd2643b360b9b449d76fed66bfb755, type: 2}
+  - {fileID: 22100000, guid: 218c82c5566eb93478291f461ea6018e, type: 2}
   turnRate: 150
   rotationSpeed: 50
   gravity: -10
@@ -2682,11 +2682,60 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1817078570 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -751476226918971245, guid: f84645f4a87b71f41a35e46da4498694, type: 3}
+  m_PrefabInstance: {fileID: 409382448}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &1817078572
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817078570}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 0.05, z: -0.03}
+--- !u!114 &1817078573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817078570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44bde7a08961b0549835896bee1a7e77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Foot: {fileID: 1817078572}
 --- !u!4 &1895007159 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7673487251499544684, guid: c98043d57e0190845b790d7b92990bee, type: 3}
   m_PrefabInstance: {fileID: 529669891}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2056257713 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2084811680363313996, guid: f84645f4a87b71f41a35e46da4498694, type: 3}
+  m_PrefabInstance: {fileID: 409382448}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &2056257715
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056257713}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 0.05, z: -0.03}
 --- !u!1 &2076672144
 GameObject:
   m_ObjectHideFlags: 0

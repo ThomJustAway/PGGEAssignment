@@ -88,7 +88,6 @@ public class MovementStateManager
         } //do normal walking
         else
         {
-            Debug.Log("idle running");
             idleMovement.CompleteAction();
         }
 
