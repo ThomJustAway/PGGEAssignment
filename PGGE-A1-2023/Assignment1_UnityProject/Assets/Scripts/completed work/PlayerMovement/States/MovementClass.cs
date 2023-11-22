@@ -16,15 +16,20 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
 
         public override void CompleteAction()
         {
-            if (CameraType == CameraType.Follow_Track_Pos_Rot ||
-                CameraType == CameraType.Follow_Track_Pos 
-                )
+            switch (CameraType)
             {
-                StandardMovement();
-            }
-            else if(CameraType == CameraType.Follow_Independent)
-            {
-                IndependentCameraMovement();
+                case CameraType.Follow_Track_Pos_Rot:
+                    StandardMovement();
+                    break;
+                case CameraType.Follow_Independent:
+                    IndependentCameraMovement();
+                    break;
+                case CameraType.Follow_Track_Pos:
+                    Follow_Track_PosMovement();
+                    break;
+                default:
+                    StandardMovement();
+                    break;
             }
         }
 
@@ -55,6 +60,25 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             float vInput = AmyMoveMentScript.Instance.InputVector.y;
             if (vInput > 0.0f) vInput = 1.0f;
             MovingBasedOnVInputOnly(vInput);
+        }
+
+        private void Follow_Track_PosMovement()
+        {
+            float hInput = AmyMoveMentScript.Instance.InputVector.x;
+            float vInput = AmyMoveMentScript.Instance.InputVector.y;
+            float walkingSpeed = AmyMoveMentScript.Instance.WalkSpeed;
+
+            float speed = walkingSpeed;
+            if (AmyMoveMentScript.Instance.Sprinting)
+            {
+                speed *= 2.0f;
+            }
+            
+            Vector3 movement = ((transform.forward * vInput) + (transform.right * hInput) ) * Time.deltaTime * speed;
+
+            characterController.Move( movement);
+            animator.SetFloat("PosZ", vInput * speed / (2.0f * walkingSpeed));
+            animator.SetFloat("PosX", hInput);
         }
 
         protected virtual void MovingBasedOnVInputOnly(float vInput)

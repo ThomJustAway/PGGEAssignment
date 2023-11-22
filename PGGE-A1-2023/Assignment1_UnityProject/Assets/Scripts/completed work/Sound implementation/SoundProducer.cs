@@ -10,7 +10,7 @@ public class SoundProducer : MonoBehaviour
     private AudioSource audioSource;
     private Dictionary<string, Surface> keySurfaceValues = new Dictionary<string, Surface>();
 
-    #region walking clips and range of audio
+    #region  range of audio
     //adjusting the min/ max volumn range
     [SerializeField] private float minWalkVolumnRange = 0.1f;
     [SerializeField]private float maxWalkVolumnRange = 1.0f;
@@ -19,12 +19,24 @@ public class SoundProducer : MonoBehaviour
     [SerializeField]private float minWalkPitchRange = 0.1f;
     [SerializeField] private float maxWalkPitchRange = 1.0f;
 
-    #region grass walking
-    [SerializeField] private AudioClip[] walkingAudioClipGrass;
+    //adjust the min/max volumn range of running
+    [SerializeField] private float minRunningVolumnRange = 0.1f;
+    [SerializeField] private float maxRunningVolumnRange = 1f;
+
+    //adjust the min/max pitch range of running
+    [SerializeField] private float minRunningPitchRange = 0.1f;
+    [SerializeField] private float maxRunningPitchRange = 1f;
+
     #endregion
 
-
+    #region steps walking
+    [SerializeField] private AudioClip[] steppingAudioClipGrass;
+    [SerializeField] private AudioClip[] steppingAudioClipConcrete;
+    [SerializeField] private AudioClip[] steppingAudioClipGrassWeed;
+    [SerializeField] private AudioClip[] steppingAudioClipStone;
     #endregion
+
+     
 
     private void Start()
     {
@@ -74,12 +86,50 @@ public class SoundProducer : MonoBehaviour
 
     public void WalkingSoundPlay()
     {
-        Surface surface= GetsurfaceOfPlayer();
-
+        float volumn = Random.Range(minWalkVolumnRange, maxWalkVolumnRange);
+        float pitch = Random.Range(minWalkPitchRange, maxWalkPitchRange);
+        PlaySteppingSound(volumn, pitch);
     }
-
     public void RunningSoundPlay()
     {
-
+        float volumn = Random.Range(minRunningVolumnRange, maxRunningVolumnRange);
+        float pitch = Random.Range(minRunningPitchRange, maxRunningPitchRange);
+        PlaySteppingSound(volumn, pitch);
     }
+
+    private void PlaySteppingSound(float volumn, float pitch)
+    {
+        Surface surface = GetsurfaceOfPlayer();
+        AudioClip audioClip = GetAudioClip(surface);
+        audioSource.clip = audioClip;
+        audioSource.pitch = pitch;
+        audioSource.volume = volumn;
+        audioSource.Play();
+    }
+
+    private AudioClip GetAudioClip(Surface surface)
+    {
+        AudioClip audioClip;
+        switch (surface)
+        {
+            case Surface.grass:
+                audioClip = steppingAudioClipGrass[Random.Range(0, steppingAudioClipGrass.Length - 1)];
+                break;
+            case Surface.concrete:
+                audioClip = steppingAudioClipConcrete[Random.Range(0, steppingAudioClipConcrete.Length - 1)];
+                break;
+            case Surface.grassWeed:
+                audioClip = steppingAudioClipGrassWeed[Random.Range(0, steppingAudioClipGrassWeed.Length - 1)];
+                break;
+            case Surface.stone:
+                audioClip = steppingAudioClipStone[(Random.Range(0, steppingAudioClipStone.Length - 1))];
+                break;
+            default:
+                audioClip = null;
+                break;
+        }
+
+        return audioClip;
+    }
+
 }

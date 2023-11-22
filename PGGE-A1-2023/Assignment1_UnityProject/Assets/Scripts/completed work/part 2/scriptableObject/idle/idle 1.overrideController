@@ -9,5 +9,5 @@ AnimatorOverrideController:
   m_Name: idle 1
   m_Controller: {fileID: 9100000, guid: 366f6957361088a4aa5a9cd2a8e2730f, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: -203655887218126122, guid: 5f6c46102a4943444aeff9f400d1b18a, type: 3}
-    m_OverrideClip: {fileID: -203655887218126122, guid: bedb004f76899f24d9b147fda1ada8b5, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 62968a321f4d485478489a29079a9d41, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 62968a321f4d485478489a29079a9d41, type: 2}
