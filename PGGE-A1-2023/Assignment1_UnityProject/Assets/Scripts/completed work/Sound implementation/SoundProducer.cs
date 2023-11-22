@@ -73,10 +73,8 @@ public class SoundProducer : MonoBehaviour
             
             if(hit.collider.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
             {
-                print(renderer.material.name);
                 if (keySurfaceValues.TryGetValue(renderer.material.name , out Surface surface))
                 {
-                    print(surface);
                     return surface;
                 }
             }
