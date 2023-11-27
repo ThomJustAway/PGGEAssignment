@@ -18,7 +18,6 @@ public class JumpingMovement : MovementAbstractClass
         AmyMoveMentScript.Instance.Velocity += newGravitationForce;
         //stopping the jump
         AmyMoveMentScript.Instance.StopJump();
-        
     }
 
 

@@ -13,12 +13,14 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
         private Vector3 HalfHeight;
         private Vector3 tempHeight;
         private string animationName = "Crouch";
+        private ThirdPersonCamera camera;
 
         public CrouchingMovement(CameraType cameraType) : base(cameraType)
         {
             normalWalkingSpeed = AmyMoveMentScript.Instance.WalkSpeed;
             crouchingSpeed =  normalWalkingSpeed * AmyMoveMentScript.Instance.CrouchingSpeedReduction;
             isCrouching = AmyMoveMentScript.Instance.CanCrouch;
+            camera = GameObject.FindObjectOfType<ThirdPersonCamera>();
         }
 
         protected override void MovingBasedOnVInputOnly(float vInput)
@@ -39,14 +41,22 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             animator.SetBool(animationName, isCrouching);
             if (isCrouching)
             {
+                //decrease the height of the character and position
                 tempHeight = CameraConstants.CameraPositionOffset;
                 HalfHeight = tempHeight;
                 HalfHeight.y *= 0.5f;
                 CameraConstants.CameraPositionOffset = HalfHeight;
+                characterController.height /= 2;
+                characterController.center /= 2;
+                camera.playerHeight /= 2;
             }
             else
             {
+                //make the camera and the character height go back to the same position
                 CameraConstants.CameraPositionOffset = tempHeight;
+                characterController.height *= 2;
+                characterController.center *= 2;
+                camera.playerHeight *= 2;
             }
         }
     }

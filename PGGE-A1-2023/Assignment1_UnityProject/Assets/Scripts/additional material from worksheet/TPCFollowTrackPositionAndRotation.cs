@@ -26,8 +26,7 @@ namespace PGGE
             mCameraTransform.rotation = Quaternion.Lerp(
                 mCameraTransform.rotation,
                 mPlayerTransform.rotation * initialRotation, //this line of code mean that it goinging to apply
-                                                             //the rotation of the player to the  camera followed by the initial rotation.
-                Time.deltaTime * CameraConstants.Damping); 
+                Time.deltaTime * CameraConstants.Damping);    //the rotation of the player to the  camera followed by the initial rotation.
 
             base.Update();
         }

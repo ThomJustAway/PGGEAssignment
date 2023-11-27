@@ -28,6 +28,7 @@ public class MovementStateManager
     private bool canReload;
     private bool reloadAnimationStillPlaying;
     private bool canWalk;
+    private bool onGround;
 
     public MovementStateManager() 
     { 
@@ -61,6 +62,7 @@ public class MovementStateManager
         canAttack = AmyMoveMentScript.Instance.IsAttacking;
         canReload = AmyMoveMentScript.Instance.IsReloading;
         canWalk = AmyMoveMentScript.Instance.IsMoving;
+        onGround = AmyMoveMentScript.Instance.isGrounded;
 
         attackAnimationStillPlaying = attackingMovement.IsAttackAnimationStillPlaying();
         reloadAnimationStillPlaying = reloadMovement.IsAnimationStillPlaying();
@@ -82,11 +84,12 @@ public class MovementStateManager
         {
             reloadMovement.CompleteAction();
         }
-        else if(!reloadAnimationStillPlaying && canWalk)
+        else if(!reloadAnimationStillPlaying && 
+                canWalk)
         {
             normalGroundMovement.CompleteAction();
         } //do normal walking
-        else
+        else if(onGround)
         {
             idleMovement.CompleteAction();
         }

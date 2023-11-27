@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638355258672938169
-    m_Hash: 804845227
+      ticks: 638358104524899645
+    m_Hash: 484050335
   m_LockFileStatus:
     m_FilePath: C:/Github repo/PGGEWeek1/Pgge worksheet5/Week05/Week05_Student/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638355258701598479
-    m_Hash: 446903069
+      ticks: 638358104524909643
+    m_Hash: 3505993184
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -2815,6 +2815,7 @@ m_ResolvedPackages:
     - 1.10.1
     - 1.11.0
     - 1.12.0
+    - 1.12.1
     compatible:
     - 1.4.3
     - 1.5.2
@@ -2827,6 +2828,7 @@ m_ResolvedPackages:
     - 1.10.1
     - 1.11.0
     - 1.12.0
+    - 1.12.1
     verified: 1.4.3
   dependencies:
   - name: com.unity.modules.unitywebrequest

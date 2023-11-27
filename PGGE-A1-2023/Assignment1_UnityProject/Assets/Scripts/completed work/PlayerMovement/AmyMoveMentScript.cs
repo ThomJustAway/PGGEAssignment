@@ -63,14 +63,14 @@ public class AmyMoveMentScript : MonoBehaviour
     public List<AttackSO> Combo { get {  return combo; } }
     #endregion
 
-    #region
+    #region idle animation
     [SerializeField] private List<AnimatorOverrideController> idleAnimations;
     public List<AnimatorOverrideController> IdleAnimations { get { return idleAnimations; } }
     #endregion
 
     #region misc values
 
-        public bool IsMoving { get { return InputVector != Vector2.zero; } }
+    public bool IsMoving { get { return InputVector != Vector2.zero; } }
 
         [SerializeField] private float turnRate;
         public float TurnRate { get {  return turnRate; } }
@@ -83,7 +83,8 @@ public class AmyMoveMentScript : MonoBehaviour
 
         private Vector3 velocity;
         public Vector3 Velocity { get { return velocity; } set { velocity = value; } }
-
+            
+        public bool isGrounded { get { return CharacterController.isGrounded; } }
     #endregion
 
     private void Start()
@@ -110,6 +111,7 @@ public class AmyMoveMentScript : MonoBehaviour
 
     private void FixedUpdate()
     {
+    
         ApplyGravity();
     }
 

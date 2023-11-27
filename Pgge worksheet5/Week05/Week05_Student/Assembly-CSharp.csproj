@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\DynamicJoystick.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Base\Joystick.cs" />
+    <Compile Include="Assets\Scripts\TPCFollowIndependentRotation.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FixedJoystick.cs" />
     <Compile Include="Assets\Scripts\Patterns\FSM.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\VariableJoystick.cs" />
@@ -65,19 +66,18 @@
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Patterns\Singleton.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickSetterExample.cs" />
+    <Compile Include="Assets\Scripts\TPCFollow.cs" />
+    <Compile Include="Assets\Scripts\TPCTopDown.cs" />
+    <Compile Include="Assets\Scripts\TPCTrack.cs" />
     <Compile Include="Assets\Scripts\ThirdPersonCamera.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\TPCFollowTrackPosition.cs" />
     <Compile Include="Assets\Joystick Pack\Scripts\Joysticks\FloatingJoystick.cs" />
+    <Compile Include="Assets\Scripts\TPCBase.cs" />
     <Compile Include="Assets\Scripts\FixedTouchField.cs" />
+    <Compile Include="Assets\Scripts\TPCFollowTrackPositionAndRotation.cs" />
     <Compile Include="Assets\Joystick Pack\Examples\JoystickPlayerExample.cs" />
     <Compile Include="Assets\Scripts\TempFile.cs" />
-    <Compile Include="Assets\Scripts\TPCBase.cs" />
-    <Compile Include="Assets\Scripts\TPCTrack.cs" />
-    <Compile Include="Assets\Scripts\TPCFollow.cs" />
-    <Compile Include="Assets\Scripts\TPCFollowTrackPosition.cs" />
-    <Compile Include="Assets\Scripts\TPCFollowTrackPositionAndRotation.cs" />
-    <Compile Include="Assets\Scripts\TPCTopDown.cs" />
-    <Compile Include="Assets\Scripts\TPCFollowIndependentRotation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

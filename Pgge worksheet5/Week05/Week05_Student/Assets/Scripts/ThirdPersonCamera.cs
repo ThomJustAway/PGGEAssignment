@@ -4,12 +4,12 @@ using UnityEngine;
 
 public static class CameraConstant
 {
-    public static Vector3 CameraAngleOffset { get; set; }
-    public static Vector3 CameraPositionOffset { get; set; }
-    public static float Damping { get; set; }
-    public static float RotationSpeed { get; set; }
-    public static float MinPitch { get; set; }
-    public static float MaxPitch { get; set; }
+    public static Vector3 CameraAngleOffset;
+    public static Vector3 CameraPositionOffset ;
+    public static float Damping ;
+    public static float RotationSpeed ;
+    public static float MinPitch ;
+    public static float MaxPitch ;
 
    
 
