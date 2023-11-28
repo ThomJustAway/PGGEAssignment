@@ -8,19 +8,44 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
     {
         private float normalWalkingSpeed;
         private float crouchingSpeed;
-        private bool isCrouching;
 
-        private Vector3 HalfHeight;
-        private Vector3 tempHeight;
         private string animationName = "Crouch";
         private ThirdPersonCamera camera;
 
-        public CrouchingMovement(CameraType cameraType) : base(cameraType)
+        private float initialCharacterHeight;
+        private float initialCharacterCenterY;
+        private Vector3 initialCameraOffset;
+
+        public CrouchingMovement(CameraType cameraType, MovementStateManager stateManager) : base(cameraType, stateManager)
         {
             normalWalkingSpeed = AmyMoveMentScript.Instance.WalkSpeed;
-            crouchingSpeed =  normalWalkingSpeed * AmyMoveMentScript.Instance.CrouchingSpeedReduction;
-            isCrouching = AmyMoveMentScript.Instance.CanCrouch;
+            crouchingSpeed = normalWalkingSpeed * AmyMoveMentScript.Instance.CrouchingSpeedReduction;
             camera = GameObject.FindObjectOfType<ThirdPersonCamera>();
+
+            initialCharacterCenterY = characterController.center.y;
+            initialCharacterHeight = characterController.height;    
+        }
+        protected override void Start()
+        {
+            //start the crouching animation
+            animator.SetBool(animationName, true);
+
+            initialCameraOffset = CameraConstants.CameraPositionOffset; //keeping a reference of the value to be called reset it.
+
+            //decrease the height of the character and position
+            initialCameraOffset = CameraConstants.CameraPositionOffset;  //clone the offset so that it I can make changes to it
+            var halfHeight = initialCameraOffset;
+            halfHeight.y /= 2;
+            CameraConstants.CameraPositionOffset = halfHeight; //lower the camera height by half 
+
+            characterController.height = initialCharacterHeight / 2;
+            characterController.center = new Vector3(0, initialCharacterCenterY / 2, 0); 
+            //halfing the height and center of the controller to make sure it stay players can crawl 
+            //without hitting object above
+
+            camera.playerHeight /= 2;
+            //this is for the raycasting
+            
         }
 
         protected override void MovingBasedOnVInputOnly(float vInput)
@@ -31,33 +56,49 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             forward.y = 0.0f; 
             characterController.Move(forward * vInput * crouchingSpeed * Time.deltaTime);
 
+            //setting the float values in the animator to show the movement
             animator.SetFloat("PosZ", vInput / 2);
             animator.SetFloat("PosX", 0);
         }
 
-        public void ChangeCrouchingValue( bool value)
+        protected override MovementAbstractClass DecisionOfState()
         {
-            isCrouching = value;
-            animator.SetBool(animationName, isCrouching);
+            RetrievingInputValues(
+                out Vector2 input,
+                out bool isAttacking,
+                out bool isJumping,
+                out bool isCrouching,
+                out bool isReloading
+                );
+
             if (isCrouching)
             {
-                //decrease the height of the character and position
-                tempHeight = CameraConstants.CameraPositionOffset;
-                HalfHeight = tempHeight;
-                HalfHeight.y *= 0.5f;
-                CameraConstants.CameraPositionOffset = HalfHeight;
-                characterController.height /= 2;
-                characterController.center /= 2;
-                camera.playerHeight /= 2;
+                //if crouching
+                return this;
+            }
+            else if(input != Vector2.zero)
+            {
+                //move the character if crouching is diabled
+                 return stateManager.normalGroundMovement;
             }
             else
             {
-                //make the camera and the character height go back to the same position
-                CameraConstants.CameraPositionOffset = tempHeight;
-                characterController.height *= 2;
-                characterController.center *= 2;
-                camera.playerHeight *= 2;
+                 return stateManager.idleMovement;
             }
         }
+
+        protected override void Exit()
+        {
+            animator.SetBool(animationName, false); //make the player stand up
+
+            CameraConstants.CameraPositionOffset = initialCameraOffset; //reset the camera offet
+
+            //reset the values of the character controller and the camera
+            characterController.height = initialCharacterHeight;
+            characterController.center = new Vector3(0, initialCharacterCenterY , 0);
+            camera.playerHeight *= 2;
+
+        }
+
     }
 }

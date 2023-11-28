@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine;
-
+using UnityEngine.InputSystem.Interactions;
 
 public class MovementStateManager
 {
@@ -12,111 +12,68 @@ public class MovementStateManager
     private List<MovementAbstractClass> movements;
 
     #region movements
-    private MovementClass normalGroundMovement;
-    private JumpingMovement jumpingMovement;
-    private PhysicMovement physicMovement;
-    private CrouchingMovement crouchingMovement;
-    private AttackingMovement attackingMovement;
-    private ReloadMovement reloadMovement;
-    private IdleMovement idleMovement;
+
+    private MovementAbstractClass currentState;
+    public MovementClass normalGroundMovement { get; private set; }
+    public JumpingMovement jumpingMovement {get; private set;}
+    public CrouchingMovement crouchingMovement {get; private set;}
+    public AttackingMovement attackingMovement {get; private set;}
+    public ReloadMovement reloadMovement {get; private set;}
+    public IdleMovement idleMovement {get; private set;}
     #endregion
 
-    private bool canJump;
-    private bool canCrouch;
-    private bool canAttack;
-    private bool attackAnimationStillPlaying;
-    private bool canReload;
-    private bool reloadAnimationStillPlaying;
-    private bool canWalk;
-    private bool onGround;
-
-    public MovementStateManager() 
-    { 
+    public MovementStateManager()
+    {
         movements = new List<MovementAbstractClass>();
         cameraReference = Camera.main.GetComponent<ThirdPersonCamera>();
         cameraType = cameraReference.mCameraType;
-        canCrouch = AmyMoveMentScript.Instance.CanCrouch;
+        //canCrouch = AmyMoveMentScript.Instance.CanCrouch;
 
         //creating the movements
-        normalGroundMovement = new MovementClass(cameraType);
-        jumpingMovement = new JumpingMovement(cameraType);
-        physicMovement = new PhysicMovement(cameraType);
-        crouchingMovement = new CrouchingMovement(cameraType);
-        attackingMovement = new AttackingMovement(cameraType);
-        reloadMovement = new ReloadMovement(cameraType);
-        idleMovement = new IdleMovement(cameraType);
+        normalGroundMovement = new MovementClass(cameraType , this);
+        jumpingMovement = new JumpingMovement(cameraType , this);
+        crouchingMovement = new CrouchingMovement(cameraType, this);
+        attackingMovement = new AttackingMovement(cameraType , this);
+        reloadMovement = new ReloadMovement(cameraType , this);
+        idleMovement = new IdleMovement(cameraType, this);
 
         //adding them in a array so that I can make changes to all of them if the camera changes
         movements.Add(normalGroundMovement);
         movements.Add(jumpingMovement);
         movements.Add(crouchingMovement);
         movements.Add(attackingMovement);
+
+        currentState = idleMovement;
     }
 
-    public void Move()
+    public void HandleState()
     {
-        CheckCameraType(); //make sure it has the correct cameratype
-        CheckCrouch(); //check if can crouch
-
-        canJump = AmyMoveMentScript.Instance.CanJump; //cant have player crouching and jumping at the same time.
-        canAttack = AmyMoveMentScript.Instance.IsAttacking;
-        canReload = AmyMoveMentScript.Instance.IsReloading;
-        canWalk = AmyMoveMentScript.Instance.IsMoving;
-        onGround = AmyMoveMentScript.Instance.isGrounded;
-
-        attackAnimationStillPlaying = attackingMovement.IsAttackAnimationStillPlaying();
-        reloadAnimationStillPlaying = reloadMovement.IsAnimationStillPlaying();
-
-        if (canCrouch )
-        {//only move because the crouch has been settled by the checkCrouch movement.
-            crouchingMovement.CompleteAction();
-        }//do crouching
-        else if (canAttack || attackAnimationStillPlaying )
+        if(currentState != null)
         {
-            attackingMovement.CompleteAction();
+            CheckCameraType();
+            currentState = currentState.Update();
         }
-        else if(canJump )
-        {
-            jumpingMovement.CompleteAction();
-            normalGroundMovement.CompleteAction();
-        } //do jumping 
-        else if (canReload )
-        {
-            reloadMovement.CompleteAction();
-        }
-        else if(!reloadAnimationStillPlaying && 
-                canWalk)
-        {
-            normalGroundMovement.CompleteAction();
-        } //do normal walking
-        else if(onGround)
-        {
-            idleMovement.CompleteAction();
-        }
+    }
 
-        //Add physic to the amy
-        physicMovement.CompleteAction();
+    public void HandleFixedUpdateState()
+    {
+        if(currentState != null)
+        {
+            currentState.FixUpdate();
+        }
     }
 
     private void CheckCameraType()
     {
-        if(cameraReference.mCameraType != cameraType)
+        if (cameraReference.mCameraType != cameraType)
         {
             Debug.Log("Camera change");
             cameraType = cameraReference.mCameraType;
-            for(int i = 0; i < movements.Count; i++)
+            for (int i = 0; i < movements.Count; i++)
             {
                 movements[i].ChangeCamera(cameraType);
             }
         }
     }
 
-    private void CheckCrouch()
-    {
-        if(canCrouch != AmyMoveMentScript.Instance.CanCrouch)
-        {
-            canCrouch = AmyMoveMentScript.Instance.CanCrouch;
-            crouchingMovement.ChangeCrouchingValue(canCrouch);
-        }
-    }
 }

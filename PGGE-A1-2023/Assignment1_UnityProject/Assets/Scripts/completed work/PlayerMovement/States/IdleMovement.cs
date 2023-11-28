@@ -9,44 +9,125 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
     {
         private List<AnimatorOverrideController> IdleAnimations;
         private string IdleAnimationName = "GroundBlendTree";
-        private float lastUpdateCall;
-        public IdleMovement(CameraType cameraType) : base(cameraType)
+        private bool hasStartedInitialAnimation; //this is to see if it has started the starting idle animation
+        private bool hasAnimationFinish;
+        private bool isNotMoving; 
+        public IdleMovement(CameraType cameraType, MovementStateManager stateManager) : base(cameraType, stateManager)
         {
             IdleAnimations = AmyMoveMentScript.Instance.IdleAnimations;
         }
 
+        protected override void Start()
+        {
+            hasStartedInitialAnimation = false;
+        }
         public override void CompleteAction()
         {
-            CheckingUpdatesAndResettingAnimation();
+            SettingValues();
+            IdleDecisionTree();
+        }
+
+        protected override MovementAbstractClass DecisionOfState()
+        {
+            RetrievingInputValues(
+                out Vector2 input,
+                out bool isAttacking,
+                out bool isJumping,
+                out bool isCrouching,
+                out bool isReloading
+                );
+
+            if(isAttacking)
+            {
+                //if players left click to enable attacking
+                return stateManager.attackingMovement;
+            }
+            else if(isJumping)
+            {
+                //if jumping is allowed
+                 return stateManager.jumpingMovement;
+            }
+            else if(isCrouching)
+            {
+                //if players enabled crouching
+                 return stateManager.crouchingMovement;
+            }
+            else if (isReloading)
+            {
+                //if player click on reloading
+                 return stateManager.reloadMovement;
+            }
+            else if(input != Vector2.zero)
+            {
+                //if player have click on input
+                 return stateManager.normalGroundMovement;
+            }
+            else
+            {
+                //if nothing is done, continue to do the idle animation
+                return this;
+            }
 
         }
 
-        private void CheckingUpdatesAndResettingAnimation()
+        protected override void Exit()
         {
-            bool hasAnimationFinish = animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.95f &&
+            hasStartedInitialAnimation = false;
+        }
+
+        #region idle movement methods
+        // deciding what idle animation to complete
+        private void IdleDecisionTree()
+        {
+            if(isNotMoving)
+            {
+                StartDoingIdleAnimation();
+            }
+            else
+            {
+                ReduceMovementAnimation();
+            }
+        }
+
+        //setting the global values in every update loop
+        private void SettingValues()
+        {
+            /*so check if the idle animation is finish. So it will consider the animation completed if 
+            the animation reaches 95%
+            */
+            hasAnimationFinish = animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.95f &&
                 animator.GetCurrentAnimatorStateInfo(0).IsTag(IdleAnimationName);
 
-            bool isNotMoving = animator.GetFloat("PosX") == 0 &&
+            //check if it has started moving
+            isNotMoving = animator.GetFloat("PosX") == 0 &&
                 animator.GetFloat("PosZ") == 0;
+        }
 
-            if (Time.time - lastUpdateCall > 0.2f &&
-                isNotMoving) //to make sure that the character is not moving
+        private void StartDoingIdleAnimation()
+        {
+            if (hasStartedInitialAnimation)
             {
-                animator.runtimeAnimatorController = IdleAnimations[0]; //reset the animation back to usual idle
-                animator.Play(IdleAnimationName, 0, 0);
+                if (hasAnimationFinish) RandomiseIdleAnimation();
             }
-            else if (hasAnimationFinish && isNotMoving) 
-            { //else that means that the animation has been playing for a long time
-                RandomiseIdleAnimation();
-            }s
             else
-            { //else it means that the character just finish their movement so reduce the animation of the character.
-                ReduceAnimation();
-                lastUpdateCall = Time.time;
+            {
+                //so if not moving, has not started the initial animation
+                //wait for all the moving animation to finish before starting its idle animation
+                if (hasAnimationFinish) CompleteInitialIdleAnimationFirst();
             }
         }
 
-        private void ReduceAnimation()
+
+        private void CompleteInitialIdleAnimationFirst()
+        {
+            //start with the first idle animation 
+            animator.runtimeAnimatorController = IdleAnimations[0];
+            animator.Play(IdleAnimationName, 0, 0);
+            hasStartedInitialAnimation = true;
+        }
+
+
+        private void ReduceMovementAnimation()
         {
             float posX = animator.GetFloat("PosX");
             float posZ = animator.GetFloat("PosZ");
@@ -87,5 +168,7 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             animator.runtimeAnimatorController = IdleAnimations[randomInt];
             animator.Play(IdleAnimationName, 0, 0);
         }
+
+        #endregion
     }
 }

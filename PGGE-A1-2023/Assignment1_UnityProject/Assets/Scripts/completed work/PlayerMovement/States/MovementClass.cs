@@ -8,10 +8,8 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
 {
     public class MovementClass : MovementAbstractClass
     {
-        
-        public MovementClass(CameraType cameraType) : base(cameraType)
+        public MovementClass(CameraType cameraType, MovementStateManager stateManager) : base(cameraType, stateManager)
         {
-            
         }
 
         public override void CompleteAction()
@@ -32,7 +30,49 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
                     break;
             }
         }
+        protected override MovementAbstractClass DecisionOfState()
+        {
+            RetrievingInputValues(
+                out Vector2 input,
+                out bool isAttacking,
+                out bool isJumping,
+                out bool isCrouching,
+                out bool isReloading
+                );
 
+            if (isAttacking)
+            {
+                //if players left click to enable attacking
+                 return stateManager.attackingMovement;
+            }
+            else if (isJumping)
+            {
+                //if jumping is allowed
+                 return stateManager.jumpingMovement;
+            }
+            else if (isCrouching)
+            {
+                //if players enabled crouching
+                return stateManager.crouchingMovement;
+            }
+            else if (isReloading)
+            {
+                //if player click on reloading
+                 return stateManager.reloadMovement;
+            }
+            else if (input == Vector2.zero)
+            {
+                //if player did nothing at all
+                return stateManager.idleMovement;
+            }
+            else
+            {
+                //if nothing is done, continue to do the idle animation
+                return this;
+            }
+        }
+
+        #region different movement implementation
         private void StandardMovement()
         {
             float vInput = AmyMoveMentScript.Instance.InputVector.y;
@@ -98,6 +138,7 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             animator.SetFloat("PosZ", vInput * speed / (2.0f * walkingSpeed));
             animator.SetFloat("PosX", 0);
         }
+        #endregion 
 
     }
 }

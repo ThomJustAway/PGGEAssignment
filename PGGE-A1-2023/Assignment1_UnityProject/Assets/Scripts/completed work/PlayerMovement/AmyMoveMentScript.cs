@@ -106,23 +106,15 @@ public class AmyMoveMentScript : MonoBehaviour
 
     private void Update()
     {
-        movementStateManager.Move();
+        movementStateManager.HandleState();
     }
 
     private void FixedUpdate()
     {
-    
-        ApplyGravity();
+        movementStateManager.HandleFixedUpdateState();
     }
 
-    private void ApplyGravity()
-    {
-        // apply gravity.
-        velocity.y += gravity * Time.deltaTime;
-        if (CharacterController.isGrounded && velocity.y < 0) velocity.y = gravity * 0.01f;
-        //because of some bug with the character controller it wont work if velocity is
-        //set to 0 https://stackoverflow.com/questions/39732254/isgrounded-in-charactercontroller-not-stable
-    }
+  
 
     #region inputsystem
     //all of this function are invoke as callbacks
@@ -133,7 +125,6 @@ public class AmyMoveMentScript : MonoBehaviour
 
     private void OnJump()
     {
-        
         if (!CanCrouch && CharacterController.isGrounded)
         {
             CanJump = true;
