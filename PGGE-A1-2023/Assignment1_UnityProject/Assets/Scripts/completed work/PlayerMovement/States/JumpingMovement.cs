@@ -10,7 +10,7 @@ public class JumpingMovement : MovementAbstractClass
     private bool hasAddForce;
     private string keyForPosX = "PosX";
     private string keyForPosZ = "PosZ";
-    private string tag = "jump";
+    private string name = "jump blend tree";
     private float jumpheight;
     private float gravity;
     public JumpingMovement(CameraType cameraType, MovementStateManager stateManager) : base(cameraType, stateManager)
@@ -55,13 +55,12 @@ public class JumpingMovement : MovementAbstractClass
 
     public override void CompleteAction()
     {
-        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        if (IsAnimationStillPlaying(1f))
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName(name))
         {
-            //when the animation reach at least 40 % of the way, then add the force
-            Debug.Log("code ran");
-            if (AnimationReachACertainPoint(0.4f) && !hasAddForce)
+            //there is a certain time frame where it wont be the jump name so just check if it is within frame
+            if (AnimationReachACertainPoint(0.3f) && !hasAddForce)
             {
+                //the force needs to be added when the player is charging the jump animation. 30% seems like a good mark to start adding it.
                 //add force the the player
                 Vector3 jumpForce = AmyMoveMentScript.Instance.Velocity;
                 jumpForce.y += Mathf.Sqrt(jumpheight * -2f * gravity);
@@ -70,8 +69,9 @@ public class JumpingMovement : MovementAbstractClass
                 hasAddForce = true;
             }
         }
-        else
+        else if(hasAddForce)
         {
+            //if the jump animation is completed, then just stop the static jumping bool
             staticJumping = false;
         }
     }
@@ -100,17 +100,10 @@ public class JumpingMovement : MovementAbstractClass
         }
     }
 
-    public bool IsAnimationStillPlaying(float interval)
-    {
-        //see if the static jump animation is complete, return true if it is still playing else return false
-        bool value = animator.GetCurrentAnimatorStateInfo(0).normalizedTime < interval;
-        return value && animator.GetCurrentAnimatorStateInfo(0).IsTag(tag);
-    }
+
 
     public bool AnimationReachACertainPoint(float point)
     {
-        return 
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= point &&
-           animator.GetCurrentAnimatorStateInfo(0).IsTag(tag);
+        return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= point;
     }
 }

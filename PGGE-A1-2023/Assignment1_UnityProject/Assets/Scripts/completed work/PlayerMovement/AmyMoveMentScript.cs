@@ -10,7 +10,6 @@ public class AmyMoveMentScript : MonoBehaviour
     //add values here to be set to the movementstateManager
     public static AmyMoveMentScript Instance { get; private set; }
     private MovementStateManager movementStateManager;
-    private PlayerInput PlayerInput; //probably can delete this
     
     public Animator Animator { get { return animator; } }
     [SerializeField] private Animator animator; 
@@ -18,27 +17,26 @@ public class AmyMoveMentScript : MonoBehaviour
 
     //did getters and setter to make sure that other scripts can access the values without changing them.
     #region inputValues
-        public Vector2 InputVector { get; private set; }
-        public bool CanJump { get; private set; }
-        public void StopJump() { CanJump = false; }
-        public bool CanCrouch { get; private set; }
+        public Vector2 InputVector { get; private set; } //values of the players input
+        public bool CanJump { get; private set; } //see if the frame allows the player to jump
+        public void StopJump() { CanJump = false; } //a function to stop the jump bool after being called
+        public bool CanCrouch { get; private set; } //see if a frame allows the player to crouch
     #endregion
 
     #region values for moving amy
-        [SerializeField] private float walkSpeed;
+        [SerializeField] private float walkSpeed; //what is a speed mulitplier of the player
         public float WalkSpeed { get { return walkSpeed; } }
 
-        [SerializeField] public float inputDamper;
+        [SerializeField] public float inputDamper; //I cant figure out the name for this one but it essentially 
+        //reduce animation movement at a set period of time if the player suddenly stops moving
         public float InputDamper { get { return inputDamper; } }
-        [SerializeField] public float resistance { get; private set; }
-        public float Resistance { get { return resistance; } }
 
-        public bool Sprinting { get; private set; }
+        public bool Sprinting { get; private set; } //see if the player can sprint in a frme
     #endregion
 
     #region values for jumping Amy
 
-    [SerializeField] private float jumpHeight;
+    [SerializeField] private float jumpHeight; //what is the jump height for the player
     public float JumpHeight { get { return jumpHeight; } }
 
     #endregion
@@ -46,50 +44,50 @@ public class AmyMoveMentScript : MonoBehaviour
     #region values for crouching Amy
 
     [Range(0,1)]
-    [SerializeField] private float crouchingSpeedReduction;
+    [SerializeField] private float crouchingSpeedReduction; //this reduce the speed when the player is crouching
     public float CrouchingSpeedReduction { get {  return crouchingSpeedReduction; } }
     #endregion
 
     #region values for reloading amy
-        public bool IsReloading { get; private set; }
-        public void FinishReloading() { IsReloading = false; }
+        public bool IsReloading { get; private set; } //see if the frame allow amy to reload
+        public void FinishReloading() { IsReloading = false; } //once the reload animation has been complete 
+    //this function will be called to tell that it has finish reloading
     #endregion
 
     #region values for Amy punching
-
-    public bool IsAttacking { get; private set; }
-    public void AttackingDone() { IsAttacking = false; }
-    [SerializeField] private List<AttackSO> combo = new List<AttackSO>();
+    public bool IsAttacking { get; private set; } //if the player can attack
+    public void AttackingDone() { IsAttacking = false; } 
+    //this is called to either prevent premature calling of the attack or if the attack animation has been completed
+    [SerializeField] private List<AttackSO> combo = new List<AttackSO>(); //list of attack combo the player can do
     public List<AttackSO> Combo { get {  return combo; } }
     #endregion
 
     #region idle animation
-    [SerializeField] private List<AnimatorOverrideController> idleAnimations;
+    [SerializeField] private List<AnimatorOverrideController> idleAnimations; //list of idle animation the player can do
     public List<AnimatorOverrideController> IdleAnimations { get { return idleAnimations; } }
     #endregion
 
     #region misc values
+    public bool IsMoving { get { return InputVector != Vector2.zero; } } //simple check to see if the player is moving
 
-    public bool IsMoving { get { return InputVector != Vector2.zero; } }
-
-        [SerializeField] private float turnRate;
+        [SerializeField] private float turnRate; //for player to rotate around, for camera type like follow rot_pos
         public float TurnRate { get {  return turnRate; } }
 
         [SerializeField] private float rotationSpeed;
         public float RotationSpeed { get { return rotationSpeed; } }
 
-        [SerializeField] private float gravity;
+        [SerializeField] private float gravity; //a constant that pulls the player down
         public float Gravity { get { return gravity; } }
 
-        private Vector3 velocity;
+        private Vector3 velocity; //a vector to be used to pull the player down
         public Vector3 Velocity { get { return velocity; } set { velocity = value; } }
             
-        public bool isGrounded { get { return CharacterController.isGrounded; } }
+        public bool isGrounded { get { return CharacterController.isGrounded; } } //check if the player is grounded
     #endregion
 
     private void Start()
     {
-        //init component
+        //init component and setting up the singleton
         if(Instance == null)
         {
             Instance = this;
@@ -99,9 +97,9 @@ public class AmyMoveMentScript : MonoBehaviour
             print("Amy movement script can only exist in one at a time");
             Destroy(Instance); 
         }
-        PlayerInput = GetComponent<PlayerInput>();
+        //setting value
         CharacterController = GetComponent<CharacterController>();
-        movementStateManager = new MovementStateManager();
+        movementStateManager = new MovementStateManager(); //setting up state manager to start calling it
     }
 
     private void Update()

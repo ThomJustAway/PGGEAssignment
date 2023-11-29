@@ -36,7 +36,6 @@ namespace PGGE
                     my = mTouchField.TouchDist.y * Time.deltaTime;
 #endif
 
-            Debug.Log($"X axis : {mx}, Y axis : {my}");
 
             // We apply the initial rotation to the camera.
             Quaternion initialRotation = Quaternion.Euler(CameraConstants.CameraAngleOffset);

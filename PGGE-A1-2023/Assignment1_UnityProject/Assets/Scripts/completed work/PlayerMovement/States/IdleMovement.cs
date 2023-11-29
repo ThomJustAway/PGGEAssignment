@@ -117,7 +117,6 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             }
         }
 
-
         private void CompleteInitialIdleAnimationFirst()
         {
             //start with the first idle animation 
@@ -126,7 +125,7 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             hasStartedInitialAnimation = true;
         }
 
-
+        //this make sure that the animation looks like it slows down instead of an sudden stop
         private void ReduceMovementAnimation()
         {
             float posX = animator.GetFloat("PosX");
@@ -162,6 +161,7 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             animator.SetFloat("PosZ", posZ);
         }
 
+        //randomise the idle animation avaliable and start to play that animation
         private void RandomiseIdleAnimation()
         {
             int randomInt = (int) UnityEngine.Random.Range(0, IdleAnimations.Count );

@@ -29,11 +29,16 @@ public class ThirdPersonCamera : MonoBehaviour
     public FixedTouchField mTouchField;
     public float playerHeight;
 
-    public CameraType mCameraType = CameraType.Follow_Track_Pos;
+    public CameraType mCameraType { get; private set; }
+    public void ChangeCameraType(CameraType cameraType)
+    {
+        mCameraType = cameraType;   
+    }
     Dictionary<CameraType, TPCBase> mThirdPersonCameraDict = new Dictionary<CameraType, TPCBase>();
 
     void Start()
     {
+        mCameraType = CameraType.Follow_Track_Pos_Rot;
         // Set to CameraConstants class so that other objects can use.
         SettingCameraConstants();
 
@@ -67,7 +72,6 @@ public class ThirdPersonCamera : MonoBehaviour
         // Update the game constant parameters every frame 
         // so that changes applied on the editor can be reflected
         SettingCameraConstants();
-
         mThirdPersonCamera = mThirdPersonCameraDict[mCameraType];
     }
 

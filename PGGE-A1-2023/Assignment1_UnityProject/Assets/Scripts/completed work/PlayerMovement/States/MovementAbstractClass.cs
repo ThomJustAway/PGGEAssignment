@@ -5,12 +5,17 @@ using UnityEngine;
 
 public abstract class MovementAbstractClass
 {
-    protected MovementStateManager stateManager;
-    protected Transform transform;
+    protected MovementStateManager stateManager; //keep track of this manager so that it change the state of it
+    protected Transform transform; //this values are meant to be used in the states
     protected Animator animator;
     protected AmyMoveMentScript player;
     protected CharacterController characterController;
+
+    //some times, the camera dictates what type of movement it has in the state. so keep a reference of it so
+    //that it can be use by the state
     protected CameraType CameraType;
+
+    //used for the start call
     private bool hasStarted = false;
     public MovementAbstractClass(CameraType cameraType, MovementStateManager stateManager)
     {
@@ -53,7 +58,7 @@ public abstract class MovementAbstractClass
 
     }
 
-    //what is the thing to do in the update loop
+    //what are the thing to do in the update loop
     public abstract void CompleteAction();
 
     //extra things for FixUpdate loop
@@ -62,26 +67,42 @@ public abstract class MovementAbstractClass
         ApplyingGravity();
     }
 
-
-
     // called if the state is about to exit
     protected virtual void Exit(){}
-
+    
+    //used to decide what is the next state afterwards
     protected abstract MovementAbstractClass DecisionOfState();
 
     // changing the state of the camera state.
 
     #region methods
+    //change the internal value of the camera for the state to use
     public void ChangeCamera(CameraType camera)
-    {//change the movement based of camera
+    {
+        //change the movement based of camera
         CameraType = camera;
+
+        ActionToTakeForDifferentCamera(camera);
     }
+
+    private void ActionToTakeForDifferentCamera(CameraType camera)
+    {
+        //do some behaviour to different camera
+        if (camera == CameraType.Follow_Track_Pos)
+        {
+            transform.rotation = Quaternion.identity;
+        }
+    }
+
+
+    //apply physic related velocity to the character
     private void ApplyingVelocityToController()
     {
         //applying velocity to the character contoller at every Update
         var velocity = AmyMoveMentScript.Instance.Velocity;
         characterController.Move(velocity * Time.deltaTime);
     }
+    //apply a downward force to the character in the fix update loop
     private void ApplyingGravity()
     {
         //creating a clone of the velocity so as to make changes to it and replace it
@@ -100,6 +121,7 @@ public abstract class MovementAbstractClass
         AmyMoveMentScript.Instance.Velocity = instanceVelocity;
     }
 
+    //a shortcut to be used in the state 
     protected void RetrievingInputValues(
         out Vector2 inputValue, 
         out bool isAttacking,

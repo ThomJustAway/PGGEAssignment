@@ -13,6 +13,7 @@ public class MovementStateManager
 
     #region movements
 
+    //keep track of the different state so that it can be swap in the state itself
     private MovementAbstractClass currentState;
     public MovementClass normalGroundMovement { get; private set; }
     public JumpingMovement jumpingMovement {get; private set;}
@@ -50,6 +51,7 @@ public class MovementStateManager
     {
         if(currentState != null)
         {
+            //check the camera and see any changes as well as complete the update loop of the stat
             CheckCameraType();
             currentState = currentState.Update();
         }
@@ -59,6 +61,7 @@ public class MovementStateManager
     {
         if(currentState != null)
         {
+            //handle the fix update loop of the state
             currentState.FixUpdate();
         }
     }
@@ -67,7 +70,6 @@ public class MovementStateManager
     {
         if (cameraReference.mCameraType != cameraType)
         {
-            Debug.Log("Camera change");
             cameraType = cameraReference.mCameraType;
             for (int i = 0; i < movements.Count; i++)
             {
