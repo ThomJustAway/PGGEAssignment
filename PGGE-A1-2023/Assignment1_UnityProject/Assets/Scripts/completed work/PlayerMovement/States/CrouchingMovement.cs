@@ -43,7 +43,6 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             //halfing the height and center of the controller to make sure it stay players can crawl 
             //without hitting object above
 
-            camera.playerHeight /= 2;
             //this is for the raycasting
             
         }
@@ -96,7 +95,6 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
             //reset the values of the character controller and the camera
             characterController.height = initialCharacterHeight;
             characterController.center = new Vector3(0, initialCharacterCenterY , 0);
-            camera.playerHeight *= 2;
 
         }
 

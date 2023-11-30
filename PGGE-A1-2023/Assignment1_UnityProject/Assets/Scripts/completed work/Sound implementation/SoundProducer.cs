@@ -68,11 +68,12 @@ public class SoundProducer : MonoBehaviour
 
         Ray ray = new Ray(offsetPosition, Vector3.down);
         RaycastHit hit;
+
         if(Physics.Raycast(ray, out hit))
         {
-            
             if(hit.collider.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
-            {
+            {//if the raycast hit, find it's meshrenderer component as it tells the material of the game object.
+                //use a dictionary to find the surface enum based of the string of the material name
                 if (keySurfaceValues.TryGetValue(renderer.material.name , out Surface surface))
                 {
                     return surface;
@@ -84,12 +85,14 @@ public class SoundProducer : MonoBehaviour
 
     public void WalkingSoundPlay()
     {
+        //vary the volumn and pitch of the walking animation
         float volumn = Random.Range(minWalkVolumnRange, maxWalkVolumnRange);
         float pitch = Random.Range(minWalkPitchRange, maxWalkPitchRange);
         PlaySteppingSound(volumn, pitch);
     }
     public void RunningSoundPlay()
     {
+        //vary the volumn and pitch of the running animation
         float volumn = Random.Range(minRunningVolumnRange, maxRunningVolumnRange);
         float pitch = Random.Range(minRunningPitchRange, maxRunningPitchRange);
         PlaySteppingSound(volumn, pitch);

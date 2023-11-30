@@ -13,7 +13,9 @@ namespace PGGE
         public static float MinPitch { get; set; }
         public static float MaxPitch { get; set; }
 
-        public static float playerHeight { get; set; } //playerheight is for adjusting the ray cast collision to the player's height
+        public static Transform CameraReferencePoint { get; set; } //CameraReferencePoint is for raycasting to the model to make it accurate
+
+
     }
     public static class PlayerConstants
     {

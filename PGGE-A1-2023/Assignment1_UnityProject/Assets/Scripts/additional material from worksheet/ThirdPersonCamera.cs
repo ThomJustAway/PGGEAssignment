@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PGGE;
+using UnityEngine.PlayerLoop;
 
 public enum CameraType
 {
@@ -27,8 +28,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public float mMaxPitch = 30.0f;
     public float mRotationSpeed = 50.0f;
     public FixedTouchField mTouchField;
-    public float playerHeight;
-
+    public Transform referencePoint;
     public CameraType mCameraType { get; private set; }
     public void ChangeCameraType(CameraType cameraType)
     {
@@ -75,6 +75,7 @@ public class ThirdPersonCamera : MonoBehaviour
         mThirdPersonCamera = mThirdPersonCameraDict[mCameraType];
     }
 
+
     private void SettingCameraConstants()
     {
         CameraConstants.Damping = mDamping;
@@ -83,7 +84,7 @@ public class ThirdPersonCamera : MonoBehaviour
         CameraConstants.MinPitch = mMinPitch;
         CameraConstants.MaxPitch = mMaxPitch;
         CameraConstants.RotationSpeed = mRotationSpeed;
-        CameraConstants.playerHeight = playerHeight;
+        CameraConstants.CameraReferencePoint = referencePoint;
     }
 
     void LateUpdate()

@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
+#endif
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(SoundProducer))]
 public class SoundProducerEditor : Editor
 {
@@ -140,3 +142,5 @@ public class SoundProducerEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
+#endif
+

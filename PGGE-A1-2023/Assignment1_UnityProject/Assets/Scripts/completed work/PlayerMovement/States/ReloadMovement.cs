@@ -6,6 +6,7 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
     public class ReloadMovement : MovementAbstractClass
     {
         private string key = "Reload";
+        private bool hasStartedPlaying = false;
 
         public ReloadMovement(CameraType cameraType, MovementStateManager stateManager) : base(cameraType, stateManager)
         {
@@ -13,18 +14,25 @@ namespace Assets.Scripts.completed_work.PlayerMovement.States
 
         protected override void Start()
         {
+            hasStartedPlaying = false;
             animator.SetTrigger(key);
             AmyMoveMentScript.Instance.FinishReloading();
         }
 
         public override void CompleteAction()
         {
+            //just like the static jump, before the reload animation start playing, the currentstate is still the previous state so
+            //we need to make sure it has started playing before moving on to the next state.
+            if (animator.GetCurrentAnimatorStateInfo(0).IsTag(key))
+            {
+                hasStartedPlaying = true;
+            }
             PreventStackingReload();
         }
 
         protected override MovementAbstractClass DecisionOfState()
         {
-            if(IsAnimationStillPlaying())
+            if(IsAnimationStillPlaying() || !hasStartedPlaying)
             {
                 //so if the reload animation is still playing, then continue to be in the reload state
                 return this;
