@@ -881,7 +881,7 @@ MonoBehaviour:
   mMaxPitch: 30
   mRotationSpeed: 50
   mTouchField: {fileID: 949028969}
-  mCameraType: 4
+  mCameraType: 2
 --- !u!114 &1539563609 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
