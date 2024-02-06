@@ -559,7 +559,7 @@ MonoBehaviour:
   mMaxPitch: 30
   mRotationSpeed: 50
   mTouchField: {fileID: 1263475373}
-  mCameraType: 2
+  mCameraType: 4
 --- !u!1 &1263475369
 GameObject:
   m_ObjectHideFlags: 0
@@ -766,6 +766,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
   m_PrefabInstance: {fileID: 1469650570}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1469650572 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 1469650570}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1567373211
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +795,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1567373212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -936,5 +947,6 @@ MonoBehaviour:
   mAnimator: {fileID: 230244813}
   mWalkSpeed: 1.5
   mRotationSpeed: 50
-  mFollowCameraForward: 0
+  mFollowCameraForward: 1
   mTurnRate: 500
+  mJoystick: {fileID: 1469650572}
